@@ -5,3 +5,59 @@ example https://ffmpeg-js-cnd.pages.dev/run.html
 need config server Fix SharedArrayBuffer error ffmpeg
 add add run.html in server
 </pre>
+
+<br>
+<br>
+<br>
+<br>
+
+<textarea>
+<script src="https://ffmpeg-js-cnd.pages.dev/ffmpeg.min.js"></script>
+<script type="module">
+const { createFFmpeg } = FFmpeg;
+
+const ffmpeg = createFFmpeg({ log: true, corePath: 'https://ffmpeg-js-cnd.pages.dev/ffmpeg-core.js' });
+
+async function convertFile() {
+    const fileInput = document.getElementById("uploadFile");
+    if (fileInput.files.length === 0) {
+        alert("file TS/AAC!");
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async function(event) {
+        const fileData = new Uint8Array(event.target.result);
+
+        if (!ffmpeg.isLoaded()) {
+            await ffmpeg.load();
+        }
+
+        ffmpeg.FS('writeFile', file.name, fileData);
+
+        const outputFile = 'output.mp3';
+
+        await ffmpeg.run('-i', file.name, '-acodec', 'libmp3lame', outputFile);
+
+        const data = ffmpeg.FS('readFile', outputFile);
+        const blob = new Blob([data.buffer], { type: 'audio/mp3' });
+        const audioURL = URL.createObjectURL(blob);
+
+        const audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.src = audioURL;
+
+        console.log("MP3 File URL:", audioURL);
+		
+		const downloadBtn = document.getElementById("downloadBtn");
+		downloadBtn.href = audioURL;
+		downloadBtn.style.display = "inline-block";
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+window.convertFile = convertFile;
+</script>
+</textarea>

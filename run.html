@@ -19,16 +19,14 @@ Cross-Origin-Embedder-Policy: require-corp
 
 <script type="module">
 
-//import { createFFmpeg } from '@ffmpeg/ffmpeg';
-
-  const { createFFmpeg } = FFmpeg;
+const { createFFmpeg } = FFmpeg;
 
 const ffmpeg = createFFmpeg({ log: true, corePath: 'https://ffmpeg-js-cnd.pages.dev/ffmpeg-core.js' });
 
 async function convertFile() {
     const fileInput = document.getElementById("uploadFile");
     if (fileInput.files.length === 0) {
-        alert("Vui lòng chọn file TS hoặc AAC!");
+        alert("file TS/AAC!");
         return;
     }
 
@@ -42,30 +40,24 @@ async function convertFile() {
             await ffmpeg.load();
         }
 
-        // Ghi file upload vào bộ nhớ ảo của FFmpeg.js
         ffmpeg.FS('writeFile', file.name, fileData);
 
-        // Định dạng đầu ra
         const outputFile = 'output.mp3';
 
-        // Chuyển đổi TS/AAC sang MP3
         await ffmpeg.run('-i', file.name, '-acodec', 'libmp3lame', outputFile);
 
-        // Đọc file MP3 đã chuyển đổi
         const data = ffmpeg.FS('readFile', outputFile);
         const blob = new Blob([data.buffer], { type: 'audio/mp3' });
         const audioURL = URL.createObjectURL(blob);
 
-        // Hiển thị kết quả
         const audioPlayer = document.getElementById("audioPlayer");
         audioPlayer.src = audioURL;
 
         console.log("MP3 File URL:", audioURL);
 		
-		// Cập nhật nút tải về
 		const downloadBtn = document.getElementById("downloadBtn");
 		downloadBtn.href = audioURL;
-		downloadBtn.style.display = "inline-block"; // Hiện nút download
+		downloadBtn.style.display = "inline-block";
     };
 
     reader.readAsArrayBuffer(file);
