@@ -1,0 +1,5 @@
+<IfModule mod_headers.c>
+    Header Set Access-Control-Allow-Origin "*"
+    Header Set Cross-Origin-Embedder-Policy "require-corp"
+    Header Set Cross-Origin-Resource-Policy "cross-origin"
+</IfModule>

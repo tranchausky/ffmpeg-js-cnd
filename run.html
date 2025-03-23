@@ -1,5 +1,5 @@
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg.min.js"></script> -->
-  <script src="https://ffmpeg-js-cnd.pages.dev/ffmpeg.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/tranchausky/ffmpeg-js-cnd@main/ffmpeg.min.js"></script>
 
 <h3>Ffmpeg conver ts,acc sang mp3</h3>
 
@@ -21,7 +21,7 @@ Cross-Origin-Embedder-Policy: require-corp
 
 const { createFFmpeg } = FFmpeg;
 
-const ffmpeg = createFFmpeg({ log: true, corePath: 'https://ffmpeg-js-cnd.pages.dev/ffmpeg-core.js' });
+const ffmpeg = createFFmpeg({ log: true, corePath: 'https://cdn.statically.io/gh/tranchausky/ffmpeg-js-cnd@main/ffmpeg-core.js' });
 
 async function convertFile() {
     const fileInput = document.getElementById("uploadFile");

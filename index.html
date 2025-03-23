@@ -12,11 +12,11 @@ add add run.html in server
 <br>
 
 <textarea>
-<script src="https://ffmpeg-js-cnd.pages.dev/ffmpeg.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/gh/tranchausky/ffmpeg-js-cnd@main/ffmpeg.min.js"></script>
 <script type="module">
 const { createFFmpeg } = FFmpeg;
 
-const ffmpeg = createFFmpeg({ log: true, corePath: 'https://ffmpeg-js-cnd.pages.dev/ffmpeg-core.js' });
+const ffmpeg = createFFmpeg({ log: true, corePath: 'https://cdn.statically.io/gh/tranchausky/ffmpeg-js-cnd@main/ffmpeg-core.js' });
 
 async function convertFile() {
     const fileInput = document.getElementById("uploadFile");
