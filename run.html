@@ -1,0 +1,86 @@
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg.min.js"></script> -->
+  <script src="ffmpeg.min.js"></script>
+
+<h3>Ffmpeg conver ts,acc sang mp3</h3>
+
+<p>code</p>
+<p>Run code need
+</p>
+<pre>
+<IfModule mod_headers.c>
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always set Cross-Origin-Embedder-Policy "require-corp"
+</IfModule>
+
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+
+</pre>
+
+<script type="module">
+
+//import { createFFmpeg } from '@ffmpeg/ffmpeg';
+
+  const { createFFmpeg } = FFmpeg;
+
+const ffmpeg = createFFmpeg({ log: true, corePath: 'http://localhost:999/ffmpeg-core.js' });
+
+async function convertFile() {
+    const fileInput = document.getElementById("uploadFile");
+    if (fileInput.files.length === 0) {
+        alert("Vui lòng chọn file TS hoặc AAC!");
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async function(event) {
+        const fileData = new Uint8Array(event.target.result);
+
+        if (!ffmpeg.isLoaded()) {
+            await ffmpeg.load();
+        }
+
+        // Ghi file upload vào bộ nhớ ảo của FFmpeg.js
+        ffmpeg.FS('writeFile', file.name, fileData);
+
+        // Định dạng đầu ra
+        const outputFile = 'output.mp3';
+
+        // Chuyển đổi TS/AAC sang MP3
+        await ffmpeg.run('-i', file.name, '-acodec', 'libmp3lame', outputFile);
+
+        // Đọc file MP3 đã chuyển đổi
+        const data = ffmpeg.FS('readFile', outputFile);
+        const blob = new Blob([data.buffer], { type: 'audio/mp3' });
+        const audioURL = URL.createObjectURL(blob);
+
+        // Hiển thị kết quả
+        const audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.src = audioURL;
+
+        console.log("MP3 File URL:", audioURL);
+		
+		// Cập nhật nút tải về
+		const downloadBtn = document.getElementById("downloadBtn");
+		downloadBtn.href = audioURL;
+		downloadBtn.style.display = "inline-block"; // Hiện nút download
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+window.convertFile = convertFile;
+</script>
+
+
+
+<input type="file" id="uploadFile" accept=".ts,.aac" />
+<button onclick="convertFile()">Convert to MP3</button>
+<audio id="audioPlayer" controls></audio>
+
+
+<a id="downloadBtn" style="display: none;" download="converted.mp3">
+    <button>Download MP3</button>
+</a><script>
