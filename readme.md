@@ -33,3 +33,18 @@ Then restart Apache:
 
 
 sudo systemctl restart apache2
+
+
+## Link
+
+```
+<script src="https://cdn.jsdelivr.net/gh/tranchausky/ffmpeg-js-cnd@main/ffmpeg.min.js"></script>
+<script type="module">
+
+const { createFFmpeg } = FFmpeg;
+
+const ffmpeg = createFFmpeg({ log: true, corePath: 'https://cdn.statically.io/gh/tranchausky/ffmpeg-js-cnd@main/ffmpeg-core.js' });
+
+</script>
+
+```
